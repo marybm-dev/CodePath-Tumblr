@@ -12,12 +12,12 @@ class Post {
     var blog_name: String
     var id: Int
     var type: String
-    var date: Date
+    var date: String
     var summary: String
     var caption: String
-    var imagePath: URL?
+    var imagePath: URL
     
-    init(name: String, id: Int, type: String, date: Date, summary: String, caption: String, imagePath: URL?) {
+    init(name: String, id: Int, type: String, date: String, summary: String, caption: String, imagePath: URL) {
         
         self.blog_name = name
         self.id = id
@@ -25,5 +25,6 @@ class Post {
         self.date = date
         self.summary = summary
         self.caption = caption
+        self.imagePath = imagePath
     }
 }
