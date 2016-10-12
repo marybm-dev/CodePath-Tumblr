@@ -142,7 +142,10 @@ class PhotosViewController: UIViewController, UITableViewDelegate, UITableViewDa
         headerView.addSubview(profileView)
         
         // Add a UILabel for the date here
-
+        let dateLabel = UILabel()
+        dateLabel.frame = CGRect(x: 60, y: 0, width: 200, height: 50)
+        dateLabel.text = posts[section].date
+        headerView.addSubview(dateLabel)
         
         return headerView
     }
