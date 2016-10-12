@@ -12,6 +12,4 @@ class PhotoCell: UITableViewCell {
     
     @IBOutlet weak var photo: UIImageView!
     
-    
-    
 }

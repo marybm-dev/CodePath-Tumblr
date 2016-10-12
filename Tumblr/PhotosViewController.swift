@@ -8,8 +8,9 @@
 
 import UIKit
 import SwiftyJSON
+import AFNetworking
 
-class PhotosViewController: UIViewController {
+class PhotosViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var tableView: UITableView!
     
@@ -18,6 +19,8 @@ class PhotosViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        tableView.delegate = self
+        tableView.dataSource = self
         tableView.rowHeight = 320
         
         fetchData()
@@ -59,6 +62,7 @@ class PhotosViewController: UIViewController {
                         NSLog("post: \(currPost.date) \(currPost.imagePath)")
                     }
                     
+                    self.tableView.reloadData()
                 }
             }
         });
@@ -78,5 +82,17 @@ class PhotosViewController: UIViewController {
         let result = resultFormatter.string(from: dateObj!)
         
         return result
+    }
+    
+    // MARK: TableView delegate
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return posts.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "com.codepath.PhotoCell") as! PhotoCell
+        cell.photo.setImageWith(posts[indexPath.row].imagePath)
+        
+        return cell
     }
 }
