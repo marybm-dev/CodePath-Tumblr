@@ -69,6 +69,7 @@ class PhotosViewController: UIViewController, UITableViewDelegate, UITableViewDa
         task.resume()
     }
     
+    // Prettifies the date from json response
     func formatDate(dateString: String) -> String {
         
         let dateFormatter = DateFormatter()
