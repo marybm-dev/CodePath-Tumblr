@@ -16,6 +16,7 @@ class PhotosViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     var posts = [Post]()
     let refreshControl = UIRefreshControl()
+    let HeaderViewIdentifier = "TableViewHeaderView"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,6 +30,8 @@ class PhotosViewController: UIViewController, UITableViewDelegate, UITableViewDa
         // init refresh control
         refreshControl.addTarget(self, action: #selector(refreshControlAction(refreshControl:)), for: UIControlEvents.valueChanged)
         tableView.insertSubview(refreshControl, at: 0)
+        
+        tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: HeaderViewIdentifier)
     }
 
     func refreshControlAction(refreshControl: UIRefreshControl) {
@@ -96,7 +99,7 @@ class PhotosViewController: UIViewController, UITableViewDelegate, UITableViewDa
         dateFormatter.isLenient = true
 
         let resultFormatter = DateFormatter()
-        resultFormatter.dateFormat = "MM-dd-yyyy"
+        resultFormatter.dateFormat = "EEE, MMM dd YYYY"
         
         let dateObj = dateFormatter.date(from: dateString)
         let result = resultFormatter.string(from: dateObj!)
@@ -105,19 +108,47 @@ class PhotosViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     // MARK: TableView delegate
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return posts.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "com.codepath.PhotoCell") as! PhotoCell
-        cell.photo.setImageWith(posts[indexPath.row].imagePath)
-        
-        return cell
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "com.codepath.PhotoCell") as! PhotoCell
+        cell.photo.setImageWith(posts[indexPath.section].imagePath)
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: HeaderViewIdentifier)! as UITableViewHeaderFooterView
+        headerView.contentView.frame = CGRect(x: 0, y: 0, width: 320, height: 50)
+        headerView.backgroundColor = UIColor(white: 1, alpha: 0.9)
+        
+        let profileView = UIImageView(frame: CGRect(x: 10, y: 10, width: 30, height: 30))
+        profileView.clipsToBounds = true
+        profileView.layer.cornerRadius = 15;
+        profileView.layer.borderColor = UIColor(white: 0.7, alpha: 0.8).cgColor
+        profileView.layer.borderWidth = 1;
+        
+        // set the avatar
+        profileView.setImageWith(NSURL(string:"https://api.tumblr.com/v2/blog/humansofnewyork.tumblr.com/avatar")! as URL)
+        headerView.addSubview(profileView)
+        
+        // Add a UILabel for the date here
+
+        
+        return headerView
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 50
     }
     
     // MARK: Segue
