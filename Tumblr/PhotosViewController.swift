@@ -15,20 +15,30 @@ class PhotosViewController: UIViewController, UITableViewDelegate, UITableViewDa
     @IBOutlet weak var tableView: UITableView!
     
     var posts = [Post]()
+    let refreshControl = UIRefreshControl()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.delegate = self
-        tableView.dataSource = self
+        // setup the table view
         tableView.rowHeight = 320
         
-        fetchData()
+        // get the data
+        fetchData(shouldRefresh: false)
+        
+        // init refresh control
+        refreshControl.addTarget(self, action: #selector(refreshControlAction(refreshControl:)), for: UIControlEvents.valueChanged)
+        tableView.insertSubview(refreshControl, at: 0)
     }
 
-    func fetchData() {
+    func refreshControlAction(refreshControl: UIRefreshControl) {
+        self.fetchData(shouldRefresh: true)
+    }
+    
+    func fetchData(shouldRefresh: Bool) {
         let apiKey = "Q6vHoaVm5L1u2ZAW1fqv3Jw48gFzYVg9P0vH0VHl3GVy6quoGV"
         let url = URL(string:"https://api.tumblr.com/v2/blog/humansofnewyork.tumblr.com/posts/photo?api_key=\(apiKey)")
+        
         let request = URLRequest(url: url!)
         let session = URLSession(
             configuration: URLSessionConfiguration.default,
@@ -38,35 +48,44 @@ class PhotosViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         let task : URLSessionDataTask = session.dataTask(with: request,completionHandler: { (dataOrNil, response, error) in
             
-            if let data = dataOrNil {
-                let json = JSON(data: data)
-                if let postsArray = json["response"]["posts"].array {
-                    
-                    // get data for each post
-                    for post in postsArray {
-                        
-                        let postDate = post["date"].string
-                        let postImage = post["photos"][0]["original_size"]["url"].URL
-
-                        guard let date = postDate else {
-                            continue
-                        }
-                        guard let imagePath = postImage else {
-                            continue
-                        }
-                        
-                        let dateString = self.formatDate(dateString: date)
-                        let currPost = Post(date: dateString, imagePath: imagePath)
-                        
-                        self.posts.append(currPost)
-                        NSLog("post: \(currPost.date) \(currPost.imagePath)")
-                    }
-                    
-                    self.tableView.reloadData()
-                }
-            }
+            self.parseData(response: dataOrNil, shouldRefresh: shouldRefresh)
+            
         });
         task.resume()
+    }
+    
+    func parseData(response: Data?, shouldRefresh: Bool) {
+        if let data = response {
+            let json = JSON(data: data)
+            if let postsArray = json["response"]["posts"].array {
+                
+                // get data for each post
+                for post in postsArray {
+                    
+                    let postDate = post["date"].string
+                    let postImage = post["photos"][0]["original_size"]["url"].URL
+                    
+                    guard let date = postDate else {
+                        continue
+                    }
+                    guard let imagePath = postImage else {
+                        continue
+                    }
+                    
+                    let dateString = self.formatDate(dateString: date)
+                    let currPost = Post(date: dateString, imagePath: imagePath)
+                    
+                    self.posts.append(currPost)
+                    NSLog("post: \(currPost.date) \(currPost.imagePath)")
+                }
+                
+                self.tableView.reloadData()
+                
+                if shouldRefresh {
+                    self.refreshControl.endRefreshing()
+                }
+            }
+        }
     }
     
     // Prettifies the date from json response
