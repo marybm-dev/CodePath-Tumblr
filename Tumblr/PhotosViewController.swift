@@ -38,30 +38,10 @@ class PhotosViewController: UIViewController {
                     // get data for each post
                     for post in postsArray {
                         
-                        let postName = post["blog_name"].string
-                        let postId = post["id"].int
-                        let postType = post["type"].string
                         let postDate = post["date"].string
-                        let postSummary = post["summary"].string
-                        let postCaption = post["caption"].string
                         let postImage = post["image_permalink"].URL
-                        
-                        guard let name = postName else {
-                            continue
-                        }
-                        guard let id = postId else {
-                            continue
-                        }
-                        guard let type = postType else {
-                            continue
-                        }
+
                         guard let date = postDate else {
-                            continue
-                        }
-                        guard let summary = postSummary else {
-                            continue
-                        }
-                        guard let caption = postCaption else {
                             continue
                         }
                         guard let imagePath = postImage else {
@@ -69,24 +49,13 @@ class PhotosViewController: UIViewController {
                         }
                         
                         let dateString = self.formatDate(dateString: date)
-                        
-                        let currPost = Post(name: name,
-                                            id:   id,
-                                            type: type,
-                                            date: dateString,
-                                            summary: summary,
-                                            caption: caption,
-                                            imagePath: imagePath)
-                        
-                        NSLog("post: \(currPost.blog_name) \(currPost.date) \(currPost.imagePath)")
+                        let currPost = Post(date: dateString, imagePath: imagePath)
                         
                         self.post.append(currPost)
+                        NSLog("post: \(currPost.date) \(currPost.imagePath)")
                     }
                     
                 }
-                //NSLog("response: \(postsDictionary)")
-                
-                
             }
         });
         task.resume()

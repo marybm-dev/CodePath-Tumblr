@@ -9,22 +9,12 @@
 import Foundation
 
 class Post {
-    var blog_name: String
-    var id: Int
-    var type: String
+
     var date: String
-    var summary: String
-    var caption: String
     var imagePath: URL
     
-    init(name: String, id: Int, type: String, date: String, summary: String, caption: String, imagePath: URL) {
-        
-        self.blog_name = name
-        self.id = id
-        self.type = type
+    init(date: String, imagePath: URL) {
         self.date = date
-        self.summary = summary
-        self.caption = caption
         self.imagePath = imagePath
     }
 }
