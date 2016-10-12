@@ -11,11 +11,15 @@ import SwiftyJSON
 
 class PhotosViewController: UIViewController {
 
-    var post = [Post]()
+    @IBOutlet weak var tableView: UITableView!
+    
+    var posts = [Post]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        tableView.rowHeight = 320
+        
         fetchData()
     }
 
@@ -39,7 +43,7 @@ class PhotosViewController: UIViewController {
                     for post in postsArray {
                         
                         let postDate = post["date"].string
-                        let postImage = post["image_permalink"].URL
+                        let postImage = post["photos"][0]["original_size"]["url"].URL
 
                         guard let date = postDate else {
                             continue
@@ -51,7 +55,7 @@ class PhotosViewController: UIViewController {
                         let dateString = self.formatDate(dateString: date)
                         let currPost = Post(date: dateString, imagePath: imagePath)
                         
-                        self.post.append(currPost)
+                        self.posts.append(currPost)
                         NSLog("post: \(currPost.date) \(currPost.imagePath)")
                     }
                     
