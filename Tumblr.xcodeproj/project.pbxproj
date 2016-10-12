@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5E597DE51DAE110E00E516AC /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E597DE41DAE110E00E516AC /* Post.swift */; };
 		5EAA39121DAD622D0049A45E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EAA39111DAD622D0049A45E /* AppDelegate.swift */; };
 		5EAA39141DAD622D0049A45E /* PhotosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EAA39131DAD622D0049A45E /* PhotosViewController.swift */; };
 		5EAA39171DAD622D0049A45E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5EAA39151DAD622D0049A45E /* Main.storyboard */; };
@@ -19,6 +20,7 @@
 
 /* Begin PBXFileReference section */
 		2C7AD0C3C73568EE76E1BA10 /* Pods-Tumblr.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tumblr.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Tumblr/Pods-Tumblr.debug.xcconfig"; sourceTree = "<group>"; };
+		5E597DE41DAE110E00E516AC /* Post.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		5EAA390E1DAD622D0049A45E /* Tumblr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tumblr.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5EAA39111DAD622D0049A45E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5EAA39131DAD622D0049A45E /* PhotosViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosViewController.swift; sourceTree = "<group>"; };
@@ -78,6 +80,7 @@
 			isa = PBXGroup;
 			children = (
 				5EAA39111DAD622D0049A45E /* AppDelegate.swift */,
+				5E597DE41DAE110E00E516AC /* Post.swift */,
 				5EAA39131DAD622D0049A45E /* PhotosViewController.swift */,
 				5EAA39151DAD622D0049A45E /* Main.storyboard */,
 				5EAA39181DAD622D0049A45E /* Assets.xcassets */,
@@ -219,6 +222,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5E597DE51DAE110E00E516AC /* Post.swift in Sources */,
 				5EAA39141DAD622D0049A45E /* PhotosViewController.swift in Sources */,
 				5EAA39121DAD622D0049A45E /* AppDelegate.swift in Sources */,
 			);
