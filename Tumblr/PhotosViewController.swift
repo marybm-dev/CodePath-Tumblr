@@ -10,13 +10,15 @@ import UIKit
 import SwiftyJSON
 import AFNetworking
 
-class PhotosViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class PhotosViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
 
     @IBOutlet weak var tableView: UITableView!
     
     var posts = [Post]()
     let refreshControl = UIRefreshControl()
     let HeaderViewIdentifier = "TableViewHeaderView"
+    
+    var isMoreDataLoading = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,7 +27,7 @@ class PhotosViewController: UIViewController, UITableViewDelegate, UITableViewDa
         tableView.rowHeight = 320
         
         // get the data
-        fetchData(shouldRefresh: false)
+        fetchData(shouldRefresh: false, offset: 0)
         
         // init refresh control
         refreshControl.addTarget(self, action: #selector(refreshControlAction(refreshControl:)), for: UIControlEvents.valueChanged)
@@ -35,12 +37,12 @@ class PhotosViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
 
     func refreshControlAction(refreshControl: UIRefreshControl) {
-        self.fetchData(shouldRefresh: true)
+        self.fetchData(shouldRefresh: true, offset: posts.count)
     }
     
-    func fetchData(shouldRefresh: Bool) {
+    func fetchData(shouldRefresh: Bool, offset: Int) {
         let apiKey = "Q6vHoaVm5L1u2ZAW1fqv3Jw48gFzYVg9P0vH0VHl3GVy6quoGV"
-        let url = URL(string:"https://api.tumblr.com/v2/blog/humansofnewyork.tumblr.com/posts/photo?api_key=\(apiKey)")
+        let url = URL(string:"https://api.tumblr.com/v2/blog/humansofnewyork.tumblr.com/posts/photo?api_key=\(apiKey)&offset=\(offset)")
         
         let request = URLRequest(url: url!)
         let session = URLSession(
@@ -82,8 +84,13 @@ class PhotosViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     NSLog("post: \(currPost.date) \(currPost.imagePath)")
                 }
                 
+                // update flag
+                self.isMoreDataLoading = false
+                
+                // reload the table view
                 self.tableView.reloadData()
                 
+                // if refreshing, stop
                 if shouldRefresh {
                     self.refreshControl.endRefreshing()
                 }
@@ -152,6 +159,24 @@ class PhotosViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 50
+    }
+    
+    // MARK: ScrollView delegate
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        if !isMoreDataLoading {
+            // Calculate the position of one screen length before the bottom of the results
+            let scrollViewContentHeight = tableView.contentSize.height
+            let scrollOffsetThreshold = scrollViewContentHeight - tableView.bounds.size.height
+            
+            // When the user has scrolled past the threshold, start requesting
+            if(scrollView.contentOffset.y > scrollOffsetThreshold && tableView.isDragging) {
+                isMoreDataLoading = true
+                
+                // ... Code to load more results ...
+                self.fetchData(shouldRefresh: false, offset: posts.count)
+            }
+        }
     }
     
     // MARK: Segue
