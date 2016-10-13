@@ -81,7 +81,6 @@ class PhotosViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     let currPost = Post(date: dateString, imagePath: imagePath)
                     
                     self.posts.append(currPost)
-                    NSLog("post: \(currPost.date) \(currPost.imagePath)")
                 }
                 
                 // update flag
@@ -136,7 +135,7 @@ class PhotosViewController: UIViewController, UITableViewDelegate, UITableViewDa
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: HeaderViewIdentifier)! as UITableViewHeaderFooterView
         headerView.contentView.frame = CGRect(x: 0, y: 0, width: 320, height: 50)
-        headerView.backgroundColor = UIColor(white: 1, alpha: 0.9)
+        headerView.contentView.backgroundColor = UIColor(white: 1, alpha: 0.9)
         
         let profileView = UIImageView(frame: CGRect(x: 10, y: 10, width: 30, height: 30))
         profileView.clipsToBounds = true
@@ -151,6 +150,7 @@ class PhotosViewController: UIViewController, UITableViewDelegate, UITableViewDa
         // Add a UILabel for the date here
         let dateLabel = UILabel()
         dateLabel.frame = CGRect(x: 60, y: 0, width: 200, height: 50)
+        dateLabel.backgroundColor = UIColor(white: 1, alpha: 0.9)
         dateLabel.text = posts[section].date
         headerView.addSubview(dateLabel)
         
@@ -159,6 +159,24 @@ class PhotosViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 50
+    }
+
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        
+       if section == (posts.count-1) {
+            let tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 320, height: 50))
+            let loadingView = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+            loadingView.startAnimating()
+            loadingView.center = tableFooterView.center
+            tableFooterView.addSubview(loadingView)
+            return tableFooterView
+        }
+        
+        return nil
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return (section == posts.count-1) ? 50 : 0
     }
     
     // MARK: ScrollView delegate
