@@ -37,7 +37,7 @@ class PhotosViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
 
     func refreshControlAction(refreshControl: UIRefreshControl) {
-        self.fetchData(shouldRefresh: true, offset: posts.count)
+        self.fetchData(shouldRefresh: true, offset: 0)
     }
     
     func fetchData(shouldRefresh: Bool, offset: Int) {
