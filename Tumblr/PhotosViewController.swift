@@ -202,6 +202,6 @@ class PhotosViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let vc = segue.destination as! PhotoDetailsViewController
         let indexPath = tableView.indexPath(for: sender as! UITableViewCell)
         
-        vc.post = posts[(indexPath?.row)!]
+        vc.post = posts[(indexPath?.section)!]
     }
 }
